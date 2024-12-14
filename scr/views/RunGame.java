@@ -50,7 +50,7 @@ public class RunGame extends JPanel {
     private JButton pauseButton;
     private JFrame frame;
     private Timer timer;
-    private GameMenu GMenu;
+    public GameMenu GMenu;
     public double playerScore = 0;
 
     Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -66,7 +66,7 @@ public class RunGame extends JPanel {
         setSize(screenWidth, screenHeight);
         setLayout(null);
         setPreferredSize(new java.awt.Dimension(screenWidth, screenHeight));
-        pauseDialog = new PauseDialog(frame, volumeOn);
+        pauseDialog = new PauseDialog(frame, volumeOn, GMenu);
 
         // Initialize the pause button
         pauseButton = new JButton();
@@ -433,6 +433,7 @@ public class RunGame extends JPanel {
         hornMusic.stop();
         backgroundMusic.stop();
         GMenu.volumeOn = volumeOn;
+        GMenu.resetRank((int)playerScore);
         frame.getContentPane().removeAll();
         frame.add(new GameOverScreen(frame, (int) (playerScore), GMenu));
         frame.revalidate();

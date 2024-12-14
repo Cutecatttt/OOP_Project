@@ -10,13 +10,15 @@ import java.awt.event.ActionListener;
 public class PauseDialog extends JDialog {
     private boolean volumeOn;
     private String lastButtonClicked;
+    private GameMenu gMenu;
 
-    public PauseDialog(JFrame frame, boolean volumeOn) {
+    public PauseDialog(JFrame frame, boolean volumeOn, GameMenu gMenu) {
         super(frame, "Tạm ngưng", true);
         setUndecorated(true); // Loại bỏ khung viền
         setSize(500, 400);
         setLocationRelativeTo(frame);
 
+        this.gMenu = gMenu;
         this.volumeOn = volumeOn;
         // Tạo nội dung giao diện
         setContentPane(new CustomPanel());
@@ -89,6 +91,8 @@ public class PauseDialog extends JDialog {
                 volumeOn = !volumeOn;
                 volumeButton
                         .setIcon(volumeOn ? resizeIcon(volumeOnIcon, 100, 100) : resizeIcon(volumeOffIcon, 100, 100));
+                gMenu.volumeOn = volumeOn;
+                gMenu.drawVolumeButton();
             } else if (e.getSource() == resumeButton) {
                 lastButtonClicked = "Resume Button";
                 dispose();
@@ -97,10 +101,9 @@ public class PauseDialog extends JDialog {
                 JDialog parentDialog = (JDialog) SwingUtilities.getWindowAncestor(this);
                 JFrame parentFrame = (JFrame) parentDialog.getOwner();
                 parentFrame.getContentPane().removeAll();
-                parentFrame.add(new GameMenu(parentFrame, volumeOn));
+                parentFrame.add(gMenu);
                 parentFrame.revalidate();
                 parentFrame.repaint();
-                volumeOn = false;
                 dispose();
             }
         }

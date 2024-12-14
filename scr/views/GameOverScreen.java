@@ -85,9 +85,8 @@ public class GameOverScreen extends JPanel implements ActionListener {
         if (e.getSource() == mainMenuButton) {
             // Return to main menu
             frame.getContentPane().removeAll();
-            frame.add(new GameMenu(frame, volumeOn));
+            frame.add(GMenu);
             frame.revalidate();
-            frame.repaint();
         } else if (e.getSource() == exitButton) {
             // Exit the game
             System.exit(0);
@@ -100,5 +99,6 @@ public class GameOverScreen extends JPanel implements ActionListener {
             frame.repaint();
             game.requestFocusInWindow();
         }
+        frame.repaint();
     }
 }
