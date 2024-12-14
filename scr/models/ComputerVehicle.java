@@ -29,7 +29,7 @@ public class ComputerVehicle {
             reset(x, 1000, 60, 100, 0, v, 0);
         } else if (type == 1) {
             // oto đi thẳng
-            x = 180 + random.nextInt(3) * 150 + random.nextInt(40);
+            x = 165  + random.nextInt(3) * 160 + random.nextInt(75);
             v = 0.3 + random.nextDouble() * 0.5;
             reset(x, -150, 80, 150, 0, v, 1);
         } else if (type == 2) {
