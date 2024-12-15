@@ -40,6 +40,7 @@ public class Motorbike extends ComputerVehicle {
         // Dừng trước ngã tư
         if (!roadType) {
             yVelocity = 2;
+            xVelocity = 0;
             return;
         }
 

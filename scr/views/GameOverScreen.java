@@ -1,4 +1,5 @@
 package scr.views;
+
 import javax.swing.*;
 
 import scr.main.GameMenu;
@@ -18,11 +19,6 @@ public class GameOverScreen extends JPanel implements ActionListener {
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension screenSize = toolkit.getScreenSize();
     private int screenHeight = Math.min(screenSize.height, 1000);
-
-    private ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
-        Image resizedImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
-    }
     boolean volumeOn;
 
     public GameOverScreen(JFrame frame, int score, GameMenu gMenu) {
@@ -44,7 +40,7 @@ public class GameOverScreen extends JPanel implements ActionListener {
 
         // Main menu button
         mainMenuButton = new JButton(resizeIcon(new ImageIcon("resources/button/button_gamemenu.png"), 235, 55));
-        mainMenuButton.setBounds(425, screenHeight - 150, 235, 55);// Adjust position and size
+        mainMenuButton.setBounds(425, screenHeight - 150, 235, 55); // Adjust position and size
         mainMenuButton.setContentAreaFilled(false);
         mainMenuButton.setBorderPainted(false);
         mainMenuButton.setFocusPainted(false);
@@ -68,6 +64,32 @@ public class GameOverScreen extends JPanel implements ActionListener {
         exitButton.setFocusPainted(true);
         exitButton.addActionListener(this);
         add(exitButton);
+
+        // Add key binding for the space bar to retry the game
+        setupKeyBindings();
+    }
+
+    private void setupKeyBindings() {
+        // Map the space key to retry the game
+        InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke("SPACE"), "retryGame");
+        actionMap.put("retryGame", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                retryGame(); // Call the retry method when space is pressed
+            }
+        });
+    }
+
+    private void retryGame() {
+        frame.getContentPane().removeAll();
+        RunGame game = new RunGame(frame, GMenu);
+        frame.add(game);
+        frame.revalidate();
+        frame.repaint();
+        game.requestFocusInWindow();
     }
 
     @Override
@@ -91,14 +113,13 @@ public class GameOverScreen extends JPanel implements ActionListener {
             // Exit the game
             System.exit(0);
         } else if (e.getSource() == retryButton) {
-            // Retry the game
-            frame.getContentPane().removeAll();
-            RunGame game = new RunGame(frame, GMenu);
-            frame.add(game);
-            frame.revalidate();
-            frame.repaint();
-            game.requestFocusInWindow();
+            retryGame(); // Retry the game when the retry button is clicked
         }
         frame.repaint();
+    }
+
+    private ImageIcon resizeIcon(ImageIcon icon, int width, int height) {
+        Image resizedImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
     }
 }

@@ -444,7 +444,7 @@ public class RunGame extends JPanel {
             hornMusic.stop();
 
         if (playerVehicle.checkMove(comVehicle, trees)) {
-            //endGame();
+            endGame();
         }
     }
 

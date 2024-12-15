@@ -1,6 +1,6 @@
 package scr.views;
-import javax.swing.*;
 
+import javax.swing.*;
 import scr.main.GameMenu;
 
 import java.awt.*;
@@ -20,17 +20,24 @@ public class PauseDialog extends JDialog {
 
         this.gMenu = gMenu;
         this.volumeOn = volumeOn;
+
+        // Đảm bảo dialog nhận focus khi hiển thị
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent e) {
+                getContentPane().requestFocusInWindow();
+            }
+        });
+
         // Tạo nội dung giao diện
         setContentPane(new CustomPanel());
     }
 
-    // Panel tùy chỉnh để vẽ giao diện
     private class CustomPanel extends JPanel implements ActionListener {
         private JButton volumeButton;
         private JButton resumeButton;
         private JButton homeButton;
 
-        // Hình ảnh cho các nút
         private ImageIcon volumeOnIcon = new ImageIcon("resources/button/_button_volume_on.png");
         private ImageIcon volumeOffIcon = new ImageIcon("resources/button/_button_volume_off.png");
         private ImageIcon resumeIcon = new ImageIcon("resources/button/_button_continue.png");
@@ -39,20 +46,39 @@ public class PauseDialog extends JDialog {
         public CustomPanel() {
             setLayout(null);
 
+            // Đảm bảo panel có thể nhận focus
+            setFocusable(true);
+            requestFocusInWindow();
+
             // Nút âm lượng
             volumeButton = createStyledButton(resizeIcon((volumeOn ? volumeOnIcon : volumeOffIcon), 100, 100));
             volumeButton.setBounds(50, 200, 100, 100);
+            volumeButton.setFocusable(false); // Ngăn cản focus
             add(volumeButton);
 
             // Nút tiếp tục
             resumeButton = createStyledButton(resizeIcon(resumeIcon, 100, 100));
             resumeButton.setBounds(200, 200, 100, 100);
+            resumeButton.setFocusable(false); // Ngăn cản focus
             add(resumeButton);
 
             // Nút thoát
             homeButton = createStyledButton(resizeIcon(homeIcon, 100, 100));
             homeButton.setBounds(350, 200, 100, 100);
+            homeButton.setFocusable(false); // Ngăn cản focus
             add(homeButton);
+
+            // Gán phím Space để đóng dialog
+            InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            ActionMap actionMap = getActionMap();
+
+            inputMap.put(KeyStroke.getKeyStroke("SPACE"), "closeDialog");
+            actionMap.put("closeDialog", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose(); // Đóng dialog
+                }
+            });
         }
 
         @Override
@@ -87,15 +113,13 @@ public class PauseDialog extends JDialog {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == volumeButton) {
                 lastButtonClicked = "Volume Button";
-                // Chuyển đổi trạng thái âm lượng
                 volumeOn = !volumeOn;
-                volumeButton
-                        .setIcon(volumeOn ? resizeIcon(volumeOnIcon, 100, 100) : resizeIcon(volumeOffIcon, 100, 100));
+                volumeButton.setIcon(volumeOn ? resizeIcon(volumeOnIcon, 100, 100) : resizeIcon(volumeOffIcon, 100, 100));
                 gMenu.volumeOn = volumeOn;
                 gMenu.drawVolumeButton();
             } else if (e.getSource() == resumeButton) {
                 lastButtonClicked = "Resume Button";
-                dispose();
+                dispose(); // Đóng dialog để tiếp tục trò chơi
             } else if (e.getSource() == homeButton) {
                 lastButtonClicked = "Home Button";
                 JDialog parentDialog = (JDialog) SwingUtilities.getWindowAncestor(this);
