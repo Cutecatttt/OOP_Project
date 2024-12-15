@@ -21,8 +21,8 @@ public class Tree {
         sliderImage = new ImageIcon(imgBGPath).getImage();
     }
 
-    public void move(double Coe, double SpCoe) {
-        y += (velocity * Coe) * SpCoe;
+    public void move(double Coe, double SpChange) {
+        y += velocity * Coe + SpChange;
     }
 
     // Phương thức vẽ cây

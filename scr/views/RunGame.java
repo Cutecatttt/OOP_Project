@@ -9,6 +9,14 @@ import scr.controller.GameSound;
 import scr.main.GameMenu;
 import scr.utils.Map;
 import scr.models.*;
+import scr.models.comvehicle.Car;
+import scr.models.comvehicle.ComputerVehicle;
+import scr.models.comvehicle.LeftCar;
+import scr.models.comvehicle.LeftPasserby;
+import scr.models.comvehicle.Motorbike;
+import scr.models.comvehicle.Police;
+import scr.models.comvehicle.RightCar;
+import scr.models.comvehicle.RightPasserby;
 
 import java.awt.*;
 
@@ -22,19 +30,18 @@ public class RunGame extends JPanel {
     private int numVehicle;
     private int CId;
     private double Coe = 2;
-    public double SpCoe = 1;
+    private double SpCoe = 1;
+    private double SpChange;
     private static String[][] imgPath = {
             { "resources/images/mb1.png", "resources/images/mb2.png", "resources/images/mb3.png" }, // xe máy
             { "resources/images/carblue.png", "resources/images/carpink.png", "resources/images/carwhite.png" }, // oto
             { "resources/images/hat.png", "resources/images/personleft.png" }, // người qua đường trái
             { "resources/images/hat.png", "resources/images/personright.png" }, // người qua đường phải
             { "resources/images/police4.png", "resources/images/police2.png" }, // cảnh sát
-            { "resources/images/carblueright.png", "resources/images/carpinkright.png", "resources/images/carwhiteright.png" },
-            // oto sang đường bên phải
-            { "resources/images/carblueleft.png", "resources/images/carpinkleft.png", "resources/images/carwhiteleft.png" },
-            // oto sang đường bên trái
-            { "resources/images/main1.png", "resources/images/main1left.png", "resources/images/main1right.png" }, // nhân vật chính
-            { "resources/images/main2.png", "resources/images/main2left.png", "resources/images/main2right.png" }
+            { "resources/images/carblueleft.png", "resources/images/carpinkleft.png", "resources/images/carwhiteleft.png" }, // oto sang đường bên trái
+            { "resources/images/carblueright.png", "resources/images/carpinkright.png", "resources/images/carwhiteright.png" }, // oto sang đường bên phải
+            { "resources/images/main1.png", "resources/images/main1left.png", "resources/images/main1right.png" }, // nhân vật T2UH
+            { "resources/images/main2.png", "resources/images/main2left.png", "resources/images/main2right.png" } // nhân T3U
     };
 
     private boolean volumeOn;
@@ -81,7 +88,7 @@ public class RunGame extends JPanel {
 
         // Initialize PlayerVehicle
         CId = gMenu.getCId();
-        playerVehicle = new PlayerVehicle(imgPath[7 + CId][0], 400, 450, 60, 100, 3);
+        playerVehicle = new PlayerVehicle(imgPath[7 + CId][0], 400, 450, 60, 100, 5);
 
         // Initialize comVehicle
         if (gMenu.getDif() == 1)
@@ -118,10 +125,9 @@ public class RunGame extends JPanel {
         timer = new Timer(15, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Coe *= 1.0002;
-                map.setCoe(Coe);
-                map.setSpCoe(SpCoe);
-                map.move();
+                Coe *= 1.0001;
+                SpChange = (2 * Coe) * SpCoe - (2 * Coe);
+                map.move(Coe, SpChange);
                 setSound();
                 addVehicle();
                 addTree();
@@ -258,18 +264,17 @@ public class RunGame extends JPanel {
     public void moveComputerVehicle() {
         for (int i = 0; i < comVehicle.size(); i++) {
             Boolean checkBoolean = true;
-            if (map.getRoadType() == 1 && map.getY() - 80 > comVehicle.get(i).getY())
+            if (map.getRoadType() == 1 && map.getY() - 70 > comVehicle.get(i).getY())
                 checkBoolean = false;
-            double getSpChange = (2 * Coe) * SpCoe - (2 * Coe);
             comVehicle.get(i).check(comVehicle, i, checkBoolean);
-            comVehicle.get(i).move(Coe, getSpChange);
+            comVehicle.get(i).move(Coe, SpChange);
         }
     }
 
     // Phương thức di chuyển của cây
     public void moveTree() {
         for (int i = 0; i < trees.size(); i++) {
-            trees.get(i).move(Coe, SpCoe);
+            trees.get(i).move(Coe, SpChange);
         }
     }
 
@@ -281,58 +286,112 @@ public class RunGame extends JPanel {
                 comVehicle.remove(i);
             }
         }
-
-        if (map.getRoadType() == 1) {
+        int percent = random.nextInt(100);
+        if (map.getRoadType() == 1) { // Các xe ở ngã tư
             int y = map.getY();
             if (comVehicle.size() < numVehicle + 5) {
-                int type = 0;
-                int t = random.nextInt(5); // random loại người theo tỉ lệ
-
-                if (comVehicle.size() < numVehicle + 2 && y > 100 && y < 200) {
-                    if (t < 2)
-                        type = 2;
-                    else if (t < 4)
-                        type = 3;
-                    else
-                        type = 4;
-                } else if (comVehicle.size() < numVehicle + 4) {
-                    if (y > 300 && y < 490 - 80) /////////////////////////////////////
-                        type = 5;
-                    else if (y > 510 && y < 700 - 80)
-                        type = 6;
-                } else if (y < 900 && y > 800) {
-                    if (t < 2)
-                        type = 2;
-                    else if (t < 4)
-                        type = 3;
-                    else
-                        type = 4;
-                } else
+                if (comVehicle.size() < numVehicle + 2 && y > 160 && y < 220) {
+                    if (percent < 40) {
+                        int k = random.nextInt(imgPath[2].length);
+                        ComputerVehicle cV = new LeftPasserby(imgPath[2][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    } else if (percent < 40) {
+                        int k = random.nextInt(imgPath[3].length);
+                        ComputerVehicle cV = new RightPasserby(imgPath[3][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    } else {
+                        int k = random.nextInt(imgPath[4].length);
+                        ComputerVehicle cV = new Police(imgPath[4][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    }
+                } else if (comVehicle.size() < numVehicle + 3 && y > 300 && y < 490 - 80) {
+                    int k = random.nextInt(imgPath[5].length);
+                    ComputerVehicle cV = new LeftCar(imgPath[5][k]);
+                    if (checkComVehicle(cV)) {
+                        comVehicle.add(cV);
+                    }
                     return;
-
-                int k = random.nextInt(imgPath[type].length);
-                ComputerVehicle cV = new ComputerVehicle(type, imgPath[type][k]);
+                } else if (comVehicle.size() < numVehicle + 4 && y > 510 && y < 700 - 80) {
+                    int k = random.nextInt(imgPath[6].length);
+                    ComputerVehicle cV = new RightCar(imgPath[6][k]);
+                    if (checkComVehicle(cV)) {
+                        comVehicle.add(cV);
+                    }
+                    return;
+                } else if (y < 880 && y > 820) {
+                    if (percent < 40) {
+                        int k = random.nextInt(imgPath[2].length);
+                        ComputerVehicle cV = new LeftPasserby(imgPath[2][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    } else if (percent < 40) {
+                        int k = random.nextInt(imgPath[3].length);
+                        ComputerVehicle cV = new RightPasserby(imgPath[3][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    } else {
+                        int k = random.nextInt(imgPath[4].length);
+                        ComputerVehicle cV = new Police(imgPath[4][k]);
+                        if (checkComVehicle(cV)) {
+                            comVehicle.add(cV);
+                        }
+                        return;
+                    }
+                }
+            } else return;
+        } else if (comVehicle.size() < numVehicle) { //Các xe ở đường thằng
+            if (percent < 55) {
+                int k = random.nextInt(imgPath[0].length);
+                ComputerVehicle cV = new Motorbike(imgPath[0][k]);
                 if (checkComVehicle(cV)) {
                     comVehicle.add(cV);
                 }
+                return;
             }
-        } else if (comVehicle.size() < numVehicle) {
-            int type = random.nextInt(100);
-            if (type < 55)
-                type = 0;
-            else if (type < 90)
-                type = 1;
-            else if (type < 94)
-                type = 2;
-            else if (type < 98)
-                type = 3;
-            else
-                type = 4;
-
-            int k = random.nextInt(imgPath[type].length);
-            ComputerVehicle cV = new ComputerVehicle(type, imgPath[type][k]);
-            if (checkComVehicle(cV)) {
-                comVehicle.add(cV);
+            else if (percent < 90) {
+                int k = random.nextInt(imgPath[1].length);
+                ComputerVehicle cV = new Car(imgPath[1][k]);
+                if (checkComVehicle(cV)) {
+                    comVehicle.add(cV);
+                }
+                return;
+            }
+            else if (percent < 94) {
+                int k = random.nextInt(imgPath[2].length);
+                ComputerVehicle cV = new LeftPasserby(imgPath[2][k]);
+                if (checkComVehicle(cV)) {
+                    comVehicle.add(cV);
+                }
+                return;
+            }
+            else if (percent < 98) {
+                int k = random.nextInt(imgPath[3].length);
+                ComputerVehicle cV = new RightPasserby(imgPath[3][k]);
+                if (checkComVehicle(cV)) {
+                    comVehicle.add(cV);
+                }
+                return;
+            }
+            else {
+                int k = random.nextInt(imgPath[4].length);
+                ComputerVehicle cV = new Police(imgPath[4][k]);
+                if (checkComVehicle(cV)) {
+                    comVehicle.add(cV);
+                }
+                return;
             }
         }
     }
@@ -377,13 +436,15 @@ public class RunGame extends JPanel {
             playerVehicle.moveRight();
         }
 
-        if (playerVehicle.checkMoveNear(comVehicle) && volumeOn)
+        if (playerVehicle.checkMoveNear(comVehicle) && volumeOn) {
             hornMusic.play();
+            hornMusic.loop();
+        }
         else
             hornMusic.stop();
 
         if (playerVehicle.checkMove(comVehicle, trees)) {
-            endGame();
+            //endGame();
         }
     }
 

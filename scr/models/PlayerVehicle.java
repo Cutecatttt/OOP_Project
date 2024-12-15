@@ -9,6 +9,8 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
+import scr.models.comvehicle.ComputerVehicle;
+
 public class PlayerVehicle {
     private int x, y;
     private int width, height;
@@ -33,13 +35,13 @@ public class PlayerVehicle {
 
     public void moveRight() {
         if (x < 700 - width) {
-            x += xVelocity * 2;
+            x += xVelocity;
         }
     }
 
     public void moveLeft() {
         if (x > 100) {
-            x -= xVelocity * 2;
+            x -= xVelocity;
         }
     }
 
