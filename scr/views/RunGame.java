@@ -327,7 +327,7 @@ public class RunGame extends JPanel {
                         comVehicle.add(cV);
                     }
                     return;
-                } else if (y < 880 && y > 820) {
+                } else if (y < 880 && y > 80) {
                     if (percent < 40) {
                         int k = random.nextInt(imgPath[2].length);
                         ComputerVehicle cV = new LeftPasserby(imgPath[2][k]);
@@ -444,7 +444,7 @@ public class RunGame extends JPanel {
             hornMusic.stop();
 
         if (playerVehicle.checkMove(comVehicle, trees)) {
-            //endGame();
+            endGame();
         }
     }
 
