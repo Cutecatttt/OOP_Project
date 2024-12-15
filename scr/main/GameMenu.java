@@ -215,7 +215,6 @@ public class GameMenu extends JPanel implements ActionListener {
         } else if (newScore > rankNo3) {
             rankNo3 = newScore;
         }
-        System.out.println(rankNo3);
     }
 
     public void setSelectedCharacterIndex(int index) {

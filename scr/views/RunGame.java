@@ -118,7 +118,7 @@ public class RunGame extends JPanel {
         timer = new Timer(15, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Coe += 0.0002;
+                Coe *= 1.0002;
                 map.setCoe(Coe);
                 map.setSpCoe(SpCoe);
                 map.move();
@@ -260,8 +260,9 @@ public class RunGame extends JPanel {
             Boolean checkBoolean = true;
             if (map.getRoadType() == 1 && map.getY() - 80 > comVehicle.get(i).getY())
                 checkBoolean = false;
+            double getSpChange = (2 * Coe) * SpCoe - (2 * Coe);
             comVehicle.get(i).check(comVehicle, i, checkBoolean);
-            comVehicle.get(i).move(Coe, map.getSpChange());
+            comVehicle.get(i).move(Coe, getSpChange);
         }
     }
 

@@ -62,10 +62,6 @@ public class Map {
         this.SpCoe = spcoe;
     }
 
-    public double getSpChange() {
-        return (velocity * Coe) * SpCoe - (velocity * Coe);
-    }
-
     public double getSpCoe() {
         return SpCoe;
     }
