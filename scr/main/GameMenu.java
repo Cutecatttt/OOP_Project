@@ -16,8 +16,8 @@ public class GameMenu extends JPanel implements ActionListener {
     private JButton volumeButton;
 
     private JFrame frame;
-    private String difficulty = "Easy";
-    private int selectedCharacterIndex = 0, DifId = 1;
+    private String difficulty = "Medium";
+    private int selectedCharacterIndex = 0, DifId = 2;
     public boolean volumeOn;
     ImageIcon backgroundImage = new ImageIcon("resources/images/menubackground.png");
     Toolkit toolkit = Toolkit.getDefaultToolkit();

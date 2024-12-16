@@ -112,8 +112,8 @@ public class RunGame extends JPanel {
 
         // Initialize trees
         for (int i = 0; i < 3; i++) {
-            Tree treeLeft = new Tree(125, -100 + i * 350);
-            Tree treeRight = new Tree(675, -100 + i * 350);
+            Tree treeLeft = new Tree(100, -100 + i * 400);
+            Tree treeRight = new Tree(700, -100 + i * 400);
             trees.add(treeLeft);
             trees.add(treeRight);
         }
@@ -403,9 +403,9 @@ public class RunGame extends JPanel {
             trees.removeFirst();
         }
         if (map.getRoadType() == 1) return;
-        if (trees.isEmpty() || trees.getLast().getY() > 350) {
-            Tree treeLeft = new Tree(125, -100);
-            Tree treeRight = new Tree(675, -100);
+        if (trees.isEmpty() || trees.getLast().getY() > 400) {
+            Tree treeLeft = new Tree(100, -100);
+            Tree treeRight = new Tree(700, -100);
             trees.add(treeLeft);
             trees.add(treeRight);
         }

@@ -21,7 +21,7 @@ public class RightPasserby extends ComputerVehicle {
 
     public void setup() {
         Random random = new Random();
-        this.x = random.nextInt(200) + 500;
+        this.x = random.nextInt(100) + 600;
         this.y = -40;
         this.width = 40;
         this.height = 40;
