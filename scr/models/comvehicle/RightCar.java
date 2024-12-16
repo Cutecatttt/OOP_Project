@@ -20,7 +20,7 @@ public class RightCar extends ComputerVehicle {
 
     public void setup() {
         Random random = new Random();
-        this.x = random.nextInt(100) + 600;
+        this.x = -random.nextInt(150) + 700;
         this.y = -80;
         this.width = 150;
         this.height = 80;

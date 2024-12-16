@@ -20,7 +20,7 @@ public class LeftCar extends ComputerVehicle {
 
     public void setup() {
         Random random = new Random();
-        this.x = random.nextInt(100) + -50;
+        this.x = random.nextInt(150) + -50;
         this.y = -80;
         this.width = 150;
         this.height = 80;
