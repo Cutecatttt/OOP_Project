@@ -41,6 +41,7 @@ public class Car extends ComputerVehicle {
             return;
         }
 
+        // Đi chậm lại nếu có xe ngay trước mặt
         for (int i = 0; i < comVehicles.size(); i++) {
             if (i == j)
                 continue;
@@ -57,13 +58,13 @@ public class Car extends ComputerVehicle {
             }
         }
 
+        // Trở lại vận tốc cũ nếu trước mặt an toàn
         if (moveDown) {
             xVelocity = 0;
         } else {
             // Trở về vận tốc cũ
             yVelocity = yVelocityOld;
         }
-        return;
     }
 }
 

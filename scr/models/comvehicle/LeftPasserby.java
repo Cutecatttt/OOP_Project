@@ -55,4 +55,3 @@ public class LeftPasserby extends ComputerVehicle {
         return;
     }
 }
-

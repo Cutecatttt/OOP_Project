@@ -1,0 +1,21 @@
+# Bỏ qua các file biên dịch
+*.class
+
+# Thư mục build
+build/
+target/
+
+# IDE và file cấu hình
+.idea/
+.vscode/
+*.iml
+
+# File log
+*.log
+
+# File hệ thống
+.DS_Store
+Thumbs.db
+
+# Thông tin môi trường
+.env
